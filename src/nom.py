@@ -16,10 +16,32 @@ except:
 
 # encode LZW
 
-encoded = []
+class BitWriter:
+    def __init__(self):
+        self.bytes = []
+        self.bits = 0
+        self.count = 0
+    def write_bit(self, bit):
+        self.bits = self.bits | (bit << (7 - self.count))
+        self.count += 1
+        if self.count == 8:
+            self.bytes.append(self.bits)
+            self.bits = 0
+            self.count = 0
+    def write(self, add_bits, add_count):
+        for i in range(0, add_count):
+            self.write_bit(1 & (add_bits >> (add_count - i - 1)))
+    def __str__(self):
+        s = ''.join([struct.pack('B', c) for c in self.bytes])
+        if self.count > 0:
+            s += struct.pack('B', self.bits)
+        return s
+
+writer = BitWriter()
 w = input[0]
 d = dict([(chr(c), c) for c in range(0, 256)])
 c = 256
+encoded = []
 if len(input[1:]) > 0:
     for i in input[1:]:
         wi = w + i
@@ -27,14 +49,25 @@ if len(input[1:]) > 0:
             w = wi
         else:
             encoded.append(d[w])
+            writer.write(d[w], 16)
             d[wi] = c
             c += 1
             w = i
     encoded.append(d[w])
+    writer.write(d[w], 16)
+
+#print ''.join([struct.pack('H', c) for c in encoded])
+print str(writer)
+
+assert False
+
+encoded = str(writer)
+
+# 
 
 # output base64/LZW decoder
 
-data_b64 = base64.b64encode(''.join([struct.pack('H', c) for c in encoded]))
+data_b64 = base64.b64encode(encoded)
 
 print """
 
