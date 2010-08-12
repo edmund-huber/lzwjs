@@ -107,7 +107,7 @@ var decode_lzw = function(d) {
 
 	var getBits = function(s, p, c) {
 		var getBit = function(s, p) {
-			var b = s[Math.floor(p / 8)];
+			var b = s[(p / 8) >> 0];
 			return (b & (1 << (7 - (p %% 8)))) > 0 ? 1 : 0;
 		};
 		var bits = 0;
