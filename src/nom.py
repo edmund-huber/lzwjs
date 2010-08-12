@@ -106,13 +106,10 @@ var decode_lzw = function(d) {
 	}
 
 	var getBits = function(s, p, c) {
-		var getBit = function(s, p) {
-			var b = s[(p / 8) >> 0];
-			return (b & (1 << (7 - (p %% 8)))) > 0 ? 1 : 0;
-		};
 		var bits = 0;
 		for (var i = 0; i < c; i++) {
-			bits = bits | (getBit(s, p + i) << (c - i - 1));
+			var b = (s[((p + i) / 8) >> 0] >> (7 - ((p + i) %% 8))) & 1;
+			bits = bits | (b << (c - i - 1));
 		}
 		return bits;
 	};
