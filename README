@@ -1,10 +1,16 @@
 lzwjs
 
-Self-deflating Javascript, written in Python and Javascript.
+    Self-deflating Javascript, written in Python and Javascript.
 
 Usage:
 
     python lzwjs.py < [js file] > [packed js file]
+
+Some tests:
+
+     python lzwjs.py < prototype-min.js > test.js
+     >> 29756B ..encypt.. 11931 codes, 18961B ..pack.. 25284B
+     >> ratio: 0.849711
 
 How it works:
 
