@@ -8,7 +8,6 @@ import sys
 # read in some ASCII
 
 input = sys.stdin.read()
-print >> sys.stderr, 'read %s characters' % len(input)
 try:
     input.encode('ascii')
 except:
@@ -42,8 +41,8 @@ class BitWriter:
 
 writer = BitWriter()
 w = input[0]
-d = dict([(chr(c), c) for c in range(0, 256)])
-c = 256
+d = dict([(chr(c), c) for c in range(0, 128)])
+c = 128
 o = 0
 if len(input[1:]) > 0:
     for i in input[1:]:
@@ -58,12 +57,12 @@ if len(input[1:]) > 0:
             w = i
     writer.write(d[w], int(math.ceil(math.log(c, 2))))
     o += 1
-print >> sys.stderr, 'outputted %s codes' % str(o)
 encoded = struct.pack('H', o) + str(writer)
 
 # output base64/LZW decoder
 
 data_b64 = base64.b64encode(encoded)
+print >> sys.stderr, '%ib ..encypt.. %i codes, %ib ..pack.. %ib' % (len(input), o, len(encoded), len(data_b64))
 
 print """
 
@@ -101,7 +100,7 @@ var decode_lzw = function(d) {
 
 	// initialize the lookup table
 	var table = {};
-	for (var i = 0; i < 256; i++) {
+	for (var i = 0; i < 128; i++) {
 		table[i] = String.fromCharCode(i);
 	}
 
@@ -115,12 +114,12 @@ var decode_lzw = function(d) {
 	};
 
 	// decode
-	var old_c = getBits(d, 16, 8);
+	var old_c = getBits(d, 16, 7);
 	var decoded = table[old_c];
-	var pos = 24;
-	var wid = 8;
+	var pos = 23;
+	var wid = 7;
 	var c = old_c;
-	var count = 256;
+	var count = 128;
 	for (var i = 0; i < total; i++) {
 		wid = Math.ceil(Math.log(count + 1) / Math.log(2));
 		var new_c = getBits(d, pos, wid);
