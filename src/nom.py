@@ -62,7 +62,8 @@ encoded = struct.pack('H', o) + str(writer)
 # output base64/LZW decoder
 
 data_b64 = base64.b64encode(encoded)
-print >> sys.stderr, '%ib ..encypt.. %i codes, %ib ..pack.. %ib' % (len(input), o, len(encoded), len(data_b64))
+print >> sys.stderr, '%iB ..encypt.. %i codes, %iB ..pack.. %iB' % (len(input), o, len(encoded), len(data_b64))
+print >> sys.stderr, 'ratio: %f' % (len(data_b64) / float(len(input)))
 
 print """
 
