@@ -1,1 +1,15 @@
+lzwjs
+
 Self-deflating Javascript, written in Python and Javascript.
+
+Usage:
+
+    python lzwjs.py < [js file] > [packed js file]
+
+How it works:
+
+    lzwjs.py accepts ASCII-encodable data on stdin, which it
+    compresses using variable-width LZW, then converts to
+    ASCII-encodable base64. A script is written to stdout which
+    decodes and decompresses the data, then eval()s it.
+
